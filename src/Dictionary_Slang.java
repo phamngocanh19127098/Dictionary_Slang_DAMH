@@ -18,11 +18,13 @@ public class Dictionary_Slang {
             System.out.println("The slang does not match with any word in slang dictionary !!!");
             return;
         }
-        System.out.println(setKey.toUpperCase()+" -----> "+ result);
+            System.out.println(setKey.toUpperCase()+" -----> "+ result);
+
 
     }
 
     public Set<String> searchWordSlang(String slang_word){
+        history.add(slang_word);
         return data_word.get(slang_word);
     }
 
@@ -70,19 +72,56 @@ public class Dictionary_Slang {
         }
         return FoundDef;
     }
+    public void loadSlangHistory(String path){
+        history = new ArrayList<>();
+        File file = new File(path);
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            String line = null;
+            while((line=bufferedReader.readLine())!=null){
+                    history.add(line);
+            }
+            bufferedReader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+  //  public void addSlangHistory(String word){
+  //      history.add(word);
+  //  }
+    public void saveHistory(String path){
+        File file = new File(path);
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            for(String i:history){
+                fileWriter.write(i+"\n");
+            }
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public static void main(String[] args) {
 	// write your code here
         Dictionary_Slang dictionary_slang = new Dictionary_Slang();
         Scanner scanner = new Scanner(System.in);
-        String definition_word = scanner.nextLine();
-        List<String> mean = dictionary_slang.searchByDefinition(definition_word);
-        for(int i = 0;i<mean.size();i++){
-            dictionary_slang.showWord(mean.get(i));
-        }
-      //  String slang_word = scanner.nextLine();
-      //  Set <String >set = dictionary_slang.searchWordSlang(slang_word);
-       // dictionary_slang.showWord(slang_word);
+       // String definition_word = scanner.nextLine();
+       // List<String> mean = dictionary_slang.searchByDefinition(definition_word);
+       // for(int i = 0;i<mean.size();i++){
+       //     dictionary_slang.showWord(mean.get(i));
+       // }
 
+  String slang_word = scanner.nextLine();
+   dictionary_slang.loadSlangHistory("activities/search_history.txt");
+  Set <String >set = dictionary_slang.searchWordSlang(slang_word);
+
+  dictionary_slang.showWord(slang_word);
+   dictionary_slang.saveHistory("activities/search_history.txt");
+   dictionary_slang.loadSlangHistory("activities/search_history.txt");
+   for(String i:dictionary_slang.history){
+       System.out.println(i);
+   }
         //System.out.println(dictionary_slang.data_word);
       // System.out.println(set);
         //set.get(sss);
