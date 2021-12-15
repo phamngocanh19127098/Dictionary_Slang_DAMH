@@ -8,6 +8,7 @@ public class Dictionary_Slang {
 
     public Dictionary_Slang(){
         readFileSlang("data/slang.txt");
+        loadSlangHistory("activities/search_history.txt");
         scanner = new Scanner(System.in);
     }
 
@@ -103,9 +104,10 @@ public class Dictionary_Slang {
         }
     }
     public void addSlangWord(){
-        System.out.println("Enter slang word: ");
+        System.out.print("Enter slang word: ");
         String slangWord = scanner.nextLine();
         slangWord = slangWord.toUpperCase();
+        Set <String>def = new HashSet<>();
         boolean isContain = data_word.containsKey(slangWord);
 
         if(!isContain){
@@ -127,6 +129,68 @@ public class Dictionary_Slang {
                 }
             }
 
+            for(int i = 0;i<numberOfDef;i++){
+                System.out.print("Enter definition "+ (i+1)+": ");
+                String tempInput = scanner.nextLine();
+                def.add(tempInput);
+
+            }
+
+            data_word.put(slangWord,def);
+
+        }
+        else {
+
+            int check = 0;
+            while (true){
+                System.out.println("This slang word already exist in this dictionary, please enter the next action");
+                System.out.println("Overwrite it, Enter 1");
+                System.out.println("Duplicate it, Enter 2");
+                System.out.print("Enter your choice: ");
+                try{
+                    check = Integer.parseInt(scanner.nextLine());
+                }
+                catch(NumberFormatException ex){
+                    System.out.println("You must enter an integer!!, please enter again");
+                }
+                if(check<1||check>2){
+                    continue;
+                }
+                break;
+
+            }
+            int numberOfDef = 0;
+            while(true){
+                try{
+                    System.out.print("Enter the number of mean (0 < number of mean < 6): ");
+                    String str = scanner.nextLine();
+                    numberOfDef = Integer.parseInt(str);
+                    if(numberOfDef<=0||numberOfDef>5){
+                        System.out.println("The value must be less than 6 and more than 0!!");
+                        continue;
+                    }
+                    break;
+                }
+                catch (NumberFormatException ex){
+                    System.out.println("The input must be integer, please enter again!!!");
+                }
+            }
+
+            for(int i = 0;i<numberOfDef;i++){
+                System.out.print("Enter definition "+ (i+1)+": ");
+                String tempInput = scanner.nextLine();
+                def.add(tempInput);
+
+            }
+            if(check==1){
+                data_word.put(slangWord,def);
+            }
+            else {
+                Set<String> oldValues = data_word.get(slangWord);
+                def.addAll(oldValues);
+                data_word.put(slangWord,def);
+            }
+
         }
     }
     public static void main(String[] args) {
@@ -138,17 +202,21 @@ public class Dictionary_Slang {
        // for(int i = 0;i<mean.size();i++){
        //     dictionary_slang.showWord(mean.get(i));
        // }
-
-  String slang_word = scanner.nextLine();
-   dictionary_slang.loadSlangHistory("activities/search_history.txt");
-  Set <String >set = dictionary_slang.searchWordSlang(slang_word);
-
-   dictionary_slang.showWord(slang_word);
-   dictionary_slang.saveHistory("activities/search_history.txt");
-   dictionary_slang.loadSlangHistory("activities/search_history.txt");
-   for(String i:dictionary_slang.history){
-       System.out.println(i);
-   }
+        dictionary_slang.addSlangWord();
+        String slang_word = scanner.nextLine();
+    //     dictionary_slang.loadSlangHistory("activities/search_history.txt");
+        Set <String >set = dictionary_slang.searchWordSlang(slang_word);
+        dictionary_slang.showWord(slang_word);
+ // String slang_word = scanner.nextLine();
+ //  dictionary_slang.loadSlangHistory("activities/search_history.txt");
+ // Set <String >set = dictionary_slang.searchWordSlang(slang_word);
+//
+ //  dictionary_slang.showWord(slang_word);
+ //  dictionary_slang.saveHistory("activities/search_history.txt");
+ //  dictionary_slang.loadSlangHistory("activities/search_history.txt");
+ //  for(String i:dictionary_slang.history){
+ //      System.out.println(i);
+ //  }
         //System.out.println(dictionary_slang.data_word);
       // System.out.println(set);
         //set.get(sss);
