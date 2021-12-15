@@ -102,6 +102,33 @@ public class Dictionary_Slang {
             e.printStackTrace();
         }
     }
+    public void addSlangWord(){
+        System.out.println("Enter slang word: ");
+        String slangWord = scanner.nextLine();
+        slangWord = slangWord.toUpperCase();
+        boolean isContain = data_word.containsKey(slangWord);
+
+        if(!isContain){
+
+            int numberOfDef = 0;
+            while(true){
+                try{
+                    System.out.print("Enter the number of mean (0 < number of mean < 6): ");
+                    String str = scanner.nextLine();
+                    numberOfDef = Integer.parseInt(str);
+                    if(numberOfDef<=0||numberOfDef>5){
+                        System.out.println("The value must be less than 6 and more than 0!!");
+                        continue;
+                    }
+                    break;
+                }
+                catch (NumberFormatException ex){
+                    System.out.println("The input must be integer, please enter again!!!");
+                }
+            }
+
+        }
+    }
     public static void main(String[] args) {
 	// write your code here
         Dictionary_Slang dictionary_slang = new Dictionary_Slang();
@@ -116,7 +143,7 @@ public class Dictionary_Slang {
    dictionary_slang.loadSlangHistory("activities/search_history.txt");
   Set <String >set = dictionary_slang.searchWordSlang(slang_word);
 
-  dictionary_slang.showWord(slang_word);
+   dictionary_slang.showWord(slang_word);
    dictionary_slang.saveHistory("activities/search_history.txt");
    dictionary_slang.loadSlangHistory("activities/search_history.txt");
    for(String i:dictionary_slang.history){
