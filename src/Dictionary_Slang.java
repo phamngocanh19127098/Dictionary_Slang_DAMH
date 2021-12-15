@@ -42,7 +42,6 @@ public class Dictionary_Slang {
                 if(hayStack.length!=2){
                     continue;
                 }
-
                 String [] meanList = hayStack[1].split("\\|");
                 Set<String> meanSet = new HashSet<String>(List.of(meanList));
                 data_word.put(hayStack[0],meanSet);
@@ -91,6 +90,7 @@ public class Dictionary_Slang {
   //  public void addSlangHistory(String word){
   //      history.add(word);
   //  }
+
     public void saveHistory(String path){
         File file = new File(path);
         try {
@@ -103,6 +103,7 @@ public class Dictionary_Slang {
             e.printStackTrace();
         }
     }
+
     public void addSlangWord(){
         System.out.print("Enter slang word: ");
         String slangWord = scanner.nextLine();
@@ -193,6 +194,16 @@ public class Dictionary_Slang {
 
         }
     }
+
+
+    public void editSlangWord(String word, Set<String> definition){
+            if(data_word.containsKey(word)){
+                data_word.put(word,definition);
+            }
+            else {
+                System.out.println("word not exist in this dictionary !!!");
+            }
+    }
     public static void main(String[] args) {
 	// write your code here
         Dictionary_Slang dictionary_slang = new Dictionary_Slang();
@@ -202,9 +213,13 @@ public class Dictionary_Slang {
        // for(int i = 0;i<mean.size();i++){
        //     dictionary_slang.showWord(mean.get(i));
        // }
-        dictionary_slang.addSlangWord();
+  //      dictionary_slang.addSlangWord();
         String slang_word = scanner.nextLine();
-    //     dictionary_slang.loadSlangHistory("activities/search_history.txt");
+  //  //     dictionary_slang.loadSlangHistory("activities/search_history.txt");
+  //       Set <String >set = dictionary_slang.searchWordSlang(slang_word);
+  //      dictionary_slang.showWord(slang_word);
+        Set<String > def = new HashSet<>();
+        dictionary_slang.editSlangWord(slang_word,def);
         Set <String >set = dictionary_slang.searchWordSlang(slang_word);
         dictionary_slang.showWord(slang_word);
  // String slang_word = scanner.nextLine();
