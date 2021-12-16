@@ -2,8 +2,8 @@ import java.io.*;
 import java.util.*;
 
 public class Dictionary_Slang {
-    public TreeMap<String, Set<String>> data_word, changes;
-    public List<String> history, trash;
+    public TreeMap<String, Set<String>> data_word, add_history,edit_history;
+    public List<String> history, delete_history;
     Scanner scanner;
 
     public Dictionary_Slang(){
@@ -87,6 +87,65 @@ public class Dictionary_Slang {
             e.printStackTrace();
         }
     }
+    public void loadAdd_history(String path){
+        add_history = new TreeMap<String,Set<String>>();
+        File file = new File(path);
+        try {
+            FileReader fr = new FileReader(file);
+            BufferedReader br= new BufferedReader(fr);
+            String line ;
+            while((line=br.readLine())!=null){
+                String[] splitedArray = line.split("`");
+                if(line.length()!=2){
+                    continue;
+                }
+                String [] rawDef = splitedArray[1].split("\\|");
+                Set<String> setWord = new HashSet<String>(List.of(rawDef));
+                add_history.put(splitedArray[0],setWord);
+            }
+            fr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadEdit_history(String path){
+        edit_history = new TreeMap<String,Set<String>>();
+        File file = new File(path);
+        try {
+            FileReader fr = new FileReader(file);
+            BufferedReader br= new BufferedReader(fr);
+            String line ;
+            while((line=br.readLine())!=null){
+                String[] splitedArray = line.split("`");
+                if(line.length()!=2){
+                    continue;
+                }
+                String [] rawDef = splitedArray[1].split("\\|");
+                Set<String> setWord = new HashSet<String>(List.of(rawDef));
+                edit_history.put(splitedArray[0],setWord);
+            }
+            fr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void loadDelete(String path){
+        delete_history = new ArrayList<>();
+        File file = new File(path);
+        try {
+            FileReader fr= new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            String line ;
+            while ((line = br.readLine())!=null){
+                delete_history.add(line);
+            }
+            fr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
   //  public void addSlangHistory(String word){
   //      history.add(word);
   //  }
@@ -138,7 +197,7 @@ public class Dictionary_Slang {
             }
 
             data_word.put(slangWord,def);
-
+            add_history.put(slangWord,def);
         }
         else {
 
@@ -199,6 +258,7 @@ public class Dictionary_Slang {
     public void editSlangWord(String word, Set<String> definition){
             if(data_word.containsKey(word)){
                 data_word.put(word,definition);
+                edit_history.put(word,definition);
             }
             else {
                 System.out.println("word not exist in this dictionary !!!");
