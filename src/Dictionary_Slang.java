@@ -5,10 +5,14 @@ public class Dictionary_Slang {
     public TreeMap<String, Set<String>> data_word, add_history,edit_history;
     public List<String> history, delete_history;
     Scanner scanner;
-
+    String thisDaySlangWord ;
     public Dictionary_Slang(){
         readFileSlang("data/slang.txt");
         loadSlangHistory("activities/search_history.txt");
+        loadAdd_history("activities/add.txt");
+        loadDelete("activities/delete.txt");
+        loadEdit_history("activities/edit.txt");
+        thisDaySlangWord = randomASlangWord();
         scanner = new Scanner(System.in);
     }
 
@@ -20,7 +24,6 @@ public class Dictionary_Slang {
             return;
         }
             System.out.println(setKey.toUpperCase()+" -----> "+ result);
-
 
     }
 
@@ -162,6 +165,77 @@ public class Dictionary_Slang {
             e.printStackTrace();
         }
     }
+    public void saveAddHistory(String path){
+        File file = new File(path);
+
+        try {
+            FileWriter fw = new FileWriter(file);
+            Set<Map.Entry<String,Set<String>>> entrySet = add_history.entrySet();
+            for(Map.Entry<String,Set<String>> indexSet:entrySet){
+                fw.write(indexSet.getKey()+"`");
+                Set <String> saved;
+                saved = indexSet.getValue();
+                int size = saved.size();
+                for(String indexString : saved){
+                    size--;
+                    if(size!=0){
+                        fw.write(indexString+"|");
+
+                    }
+                    else {
+                        fw.write(indexString+"\n");
+                    }
+                }
+            }
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void saveEditHistory(String path){
+        File file = new File(path);
+
+        try {
+            FileWriter fw = new FileWriter(file);
+            Set<Map.Entry<String,Set<String>>> entrySet = edit_history.entrySet();
+            for(Map.Entry<String,Set<String>> indexSet:entrySet){
+                fw.write(indexSet.getKey()+"`");
+                Set <String> saved;
+                saved = indexSet.getValue();
+                int size = saved.size();
+                for(String indexString : saved){
+                    size--;
+                    if(size!=0){
+                        fw.write(indexString+"|");
+
+                    }
+                    else {
+                        fw.write(indexString+"\n");
+                    }
+                }
+            }
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void saveDeleteHistory(String path){
+        File file = new File(path);
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            for(String i:delete_history){
+                fileWriter.write(i+"\n");
+            }
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void addSlangWord(){
         System.out.print("Enter slang word: ");
@@ -255,33 +329,110 @@ public class Dictionary_Slang {
     }
 
 
-    public void editSlangWord(String word, Set<String> definition){
-            if(data_word.containsKey(word)){
-                data_word.put(word,definition);
-                edit_history.put(word,definition);
+    public void editSlangWord(){
+        System.out.print("Enter the slang word you want to edit: ");
+        String word = scanner.nextLine();
+        if(data_word.containsKey(word)){
+         //
+         //
+            Set <String>def = new HashSet<>();
+            int numberOfDef = 0;
+            while(true){
+                try{
+                    System.out.print("Enter the number of mean (0 < number of mean < 6): ");
+                    String str = scanner.nextLine();
+                    numberOfDef = Integer.parseInt(str);
+                    if(numberOfDef<=0||numberOfDef>5){
+                        System.out.println("The value must be less than 6 and more than 0!!");
+                        continue;
+                    }
+                    break;
+                }
+                catch (NumberFormatException ex){
+                    System.out.println("The input must be integer, please enter again!!!");
+                }
             }
-            else {
-                System.out.println("word not exist in this dictionary !!!");
+
+            for(int i = 0;i<numberOfDef;i++){
+                System.out.print("Enter definition "+ (i+1)+": ");
+                String tempInput = scanner.nextLine();
+                def.add(tempInput);
+
             }
+            data_word.put(word,def);
+            edit_history.put(word,def);
+        }
+        else {
+            System.out.println("word not exist in this dictionary !!!");
+        }
+
+
     }
+    public boolean deleteSlangWord(){
+            System.out.println("Enter slang word you want to delete");
+            String word = scanner.nextLine();
+
+            if(data_word.containsKey(word)){
+                int num=0;
+                while(true){
+                    try{
+                        System.out.print("Do you want to delete this slang word (1)YES, (2)NO: ");
+                        num = scanner.nextInt();
+                    }
+                    catch (NumberFormatException ex){
+                        System.out.println("You must enter a integer, please enter again!!!");
+                    }
+                    if(num<1||num>2){
+                        continue;
+                    }
+                    break;
+                }
+                if(num==1){
+                    word = word.toUpperCase();
+                    if(data_word.remove(word)!=null){
+                        delete_history.add(word);
+                        return true;
+                    }
+
+                }
+            }
+            System.out.println("Slang word does not exist in this dictionary");
+
+           return false;
+    }
+    public void resetDictionary(){
+            readFileSlang("data/slang.txt");
+            edit_history.clear();
+            add_history.clear();
+            delete_history.clear();
+    }
+    public String randomASlangWord(){
+        Object[] convertedToArray = data_word.keySet().toArray();
+        return (String)convertedToArray[new Random().nextInt(convertedToArray.length)];
+    }
+
     public static void main(String[] args) {
 	// write your code here
         Dictionary_Slang dictionary_slang = new Dictionary_Slang();
-        Scanner scanner = new Scanner(System.in);
+      //  System.out.println(dictionary_slang.thisDaySlangWord);
+     //   dictionary_slang.resetDictionary();
+   //     Scanner scanner = new Scanner(System.in);
+    //    dictionary_slang.GUI();
        // String definition_word = scanner.nextLine();
        // List<String> mean = dictionary_slang.searchByDefinition(definition_word);
        // for(int i = 0;i<mean.size();i++){
        //     dictionary_slang.showWord(mean.get(i));
        // }
   //      dictionary_slang.addSlangWord();
-        String slang_word = scanner.nextLine();
+ //       String slang_word = scanner.nextLine();
+   //     dictionary_slang.showWord(slang_word);
   //  //     dictionary_slang.loadSlangHistory("activities/search_history.txt");
   //       Set <String >set = dictionary_slang.searchWordSlang(slang_word);
   //      dictionary_slang.showWord(slang_word);
-        Set<String > def = new HashSet<>();
-        dictionary_slang.editSlangWord(slang_word,def);
-        Set <String >set = dictionary_slang.searchWordSlang(slang_word);
-        dictionary_slang.showWord(slang_word);
+   //     Set<String > def = new HashSet<>();
+   //     dictionary_slang.editSlangWord(slang_word,def);
+   //     Set <String >set = dictionary_slang.searchWordSlang(slang_word);
+   //     dictionary_slang.showWord(slang_word);
  // String slang_word = scanner.nextLine();
  //  dictionary_slang.loadSlangHistory("activities/search_history.txt");
  // Set <String >set = dictionary_slang.searchWordSlang(slang_word);
