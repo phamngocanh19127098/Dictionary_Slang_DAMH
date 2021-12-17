@@ -377,7 +377,8 @@ public class Dictionary_Slang {
                 while(true){
                     try{
                         System.out.print("Do you want to delete this slang word (1)YES, (2)NO: ");
-                        num = scanner.nextInt();
+                        String str = scanner.nextLine();
+                        num = Integer.parseInt(str);
                     }
                     catch (NumberFormatException ex){
                         System.out.println("You must enter a integer, please enter again!!!");
@@ -401,14 +402,131 @@ public class Dictionary_Slang {
            return false;
     }
     public void resetDictionary(){
+        int num=0;
+        while(true){
+            try{
+                System.out.print("Do you want to reset this dictionary (1)YES, (2)NO: ");
+                String str = scanner.nextLine();
+                num = Integer.parseInt(str);
+            }
+            catch (NumberFormatException ex){
+                System.out.println("You must enter a integer, please enter again!!!");
+            }
+            if(num<1||num>2){
+                System.out.println("The input must be 1 or 2");
+                continue;
+            }
+            break;
+        }
+        if(num==1){
             readFileSlang("data/slang.txt");
             edit_history.clear();
             add_history.clear();
             delete_history.clear();
+        }
+
     }
     public String randomASlangWord(){
         Object[] convertedToArray = data_word.keySet().toArray();
         return (String)convertedToArray[new Random().nextInt(convertedToArray.length)];
+    }
+    public Map<String,Set<String>> generateResultQuiz(){
+        Map<String, Set<String>> result = new HashMap<String,Set<String>>();
+        for(int i=0;i<4;i++){
+            String wordRandom = randomASlangWord();
+            Set<String> def = data_word.get(wordRandom);
+            result.put(wordRandom,def);
+        }
+        return result;
+    }
+    public void generateSlangQuiz(){
+        System.out.println("\n<---------- You're participate in SLANG QUIZ ---------->");
+        Map<String, Set<String>> QuizSet = generateResultQuiz();
+        int question = new Random().nextInt(4)+1;
+        String SavedQuestion="";
+        Set<String> SavedAnswer =new HashSet<>();
+        int answer = 0;
+        int count = 0;
+        for(Map.Entry<String,Set<String>> indexEntry : QuizSet.entrySet()){
+            count++;
+            System.out.println(count+". "+indexEntry.getValue());
+            if(count==question){
+                answer=count;
+                SavedQuestion = indexEntry.getKey();
+                SavedAnswer = indexEntry.getValue();
+            }
+        }
+        System.out.println("The question is "+SavedQuestion);
+
+        int choice = 0;
+
+        while(true){
+            try {
+                System.out.print("Enter your choice (from 1 to 4): ");
+                choice = Integer.parseInt(scanner.nextLine());
+
+            }
+            catch (NumberFormatException ex){
+                System.out.println("You must enter an integer, please try again!!");
+            }
+            if(choice<1||choice>4){
+                System.out.println("The value must be an integer from 1 to 4");
+                continue;
+            }
+            break;
+        }
+        if(choice==answer){
+            System.out.println("You're right");
+        }
+        else{
+            System.out.println("\nYou're wrong");
+            System.out.println("The answer is "+SavedAnswer );
+        }
+    }
+    public void generateDefinitionQuiz(){
+        System.out.println("\n<---------- You're participate in DEFINITION QUIZ ---------->");
+        Map<String, Set<String>> DefSet = generateResultQuiz();
+        int question = new Random().nextInt(4)+1;
+
+        String SavedAnswer="";
+        Set<String> Questions =new HashSet<>();
+        int answer = 0;
+        int count = 0;
+        for(Map.Entry<String,Set<String>> indexEntry : DefSet.entrySet()){
+            count++;
+            System.out.println(count+". "+indexEntry.getKey());
+            if(count==question){
+                answer=count;
+                Questions= indexEntry.getValue();
+               SavedAnswer = indexEntry.getKey();
+            }
+        }
+        System.out.println("The question is "+Questions);
+
+        int choice = 0;
+
+        while(true){
+            try {
+                System.out.print("Enter your choice (from 1 to 4): ");
+                choice = Integer.parseInt(scanner.nextLine());
+
+            }
+            catch (NumberFormatException ex){
+                System.out.println("You must enter an integer, please try again!!");
+            }
+            if(choice<1||choice>4){
+                System.out.println("The value must be an integer from 1 to 4");
+                continue;
+            }
+            break;
+        }
+        if(choice==answer){
+            System.out.println("You're right");
+        }
+        else{
+            System.out.println("\nYou're wrong");
+            System.out.println("The answer is "+SavedAnswer );
+        }
     }
     public void GUI(){
         while (true){
@@ -468,6 +586,12 @@ public class Dictionary_Slang {
                 case "8":
                     showWord(thisDaySlangWord);
                     break;
+                case "9":
+                    generateSlangQuiz();
+                    break;
+                case "10":
+                    generateDefinitionQuiz();
+                    break;
                 case "0":
                     return;
             }
@@ -476,46 +600,9 @@ public class Dictionary_Slang {
 
     }
     public static void main(String[] args) {
-	// write your code here
         Dictionary_Slang dictionary_slang = new Dictionary_Slang();
-      //  System.out.println(dictionary_slang.thisDaySlangWord);
-     //   dictionary_slang.resetDictionary();
-   //     Scanner scanner = new Scanner(System.in);
-    //    dictionary_slang.GUI();
-       // String definition_word = scanner.nextLine();
-       // List<String> mean = dictionary_slang.searchByDefinition(definition_word);
-       // for(int i = 0;i<mean.size();i++){
-       //     dictionary_slang.showWord(mean.get(i));
-       // }
-  //      dictionary_slang.addSlangWord();
- //       String slang_word = scanner.nextLine();
-   //     dictionary_slang.showWord(slang_word);
-  //  //     dictionary_slang.loadSlangHistory("activities/search_history.txt");
-  //       Set <String >set = dictionary_slang.searchWordSlang(slang_word);
-  //      dictionary_slang.showWord(slang_word);
-   //     Set<String > def = new HashSet<>();
-   //     dictionary_slang.editSlangWord(slang_word,def);
-   //     Set <String >set = dictionary_slang.searchWordSlang(slang_word);
-   //     dictionary_slang.showWord(slang_word);
- // String slang_word = scanner.nextLine();
- //  dictionary_slang.loadSlangHistory("activities/search_history.txt");
- // Set <String >set = dictionary_slang.searchWordSlang(slang_word);
-//
- //  dictionary_slang.showWord(slang_word);
- //  dictionary_slang.saveHistory("activities/search_history.txt");
- //  dictionary_slang.loadSlangHistory("activities/search_history.txt");
- //  for(String i:dictionary_slang.history){
- //      System.out.println(i);
- //  }
-        //System.out.println(dictionary_slang.data_word);
-      // System.out.println(set);
-        //set.get(sss);
-        // set.get(s)
-        // if (s != null) {
-            //     System.out.println("\t" + key.toUpperCase() + "\t->\t" + s.toString());
-            // }
-        // else
-        //     System.out.println("No matches");
+        dictionary_slang.GUI();
+
     }
 
 }
