@@ -593,6 +593,10 @@ public class Dictionary_Slang {
                     generateDefinitionQuiz();
                     break;
                 case "0":
+                    saveHistory("activities/search_history.txt");
+                    saveAddHistory("activities/add.txt");
+                    saveDeleteHistory("activities/delete.txt");
+                    saveEditHistory("activities/edit.txt");
                     return;
             }
 
