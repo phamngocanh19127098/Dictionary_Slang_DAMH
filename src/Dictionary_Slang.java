@@ -601,7 +601,6 @@ public class Dictionary_Slang {
             }
 
         }
-
     }
     public static void main(String[] args) {
         Dictionary_Slang dictionary_slang = new Dictionary_Slang();
