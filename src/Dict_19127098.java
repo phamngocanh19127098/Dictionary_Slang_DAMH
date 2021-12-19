@@ -1,12 +1,12 @@
 import java.io.*;
 import java.util.*;
 
-public class Dictionary_Slang {
+public class Dict_19127098 {
     public TreeMap<String, Set<String>> data_word, add_history,edit_history;
     public List<String> history, delete_history;
     Scanner scanner;
     String thisDaySlangWord ;
-    public Dictionary_Slang(){
+    public Dict_19127098(){
         readFileSlang("data/slang.txt");
         loadSlangHistory("activities/search_history.txt");
         loadAdd_history("activities/add.txt");
@@ -603,8 +603,8 @@ public class Dictionary_Slang {
         }
     }
     public static void main(String[] args) {
-        Dictionary_Slang dictionary_slang = new Dictionary_Slang();
-        dictionary_slang.GUI();
+        Dict_19127098 dict19127098 = new Dict_19127098();
+        dict19127098.GUI();
 
     }
 
