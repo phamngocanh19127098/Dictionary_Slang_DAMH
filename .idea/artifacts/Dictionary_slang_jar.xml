@@ -2,7 +2,7 @@
   <artifact type="jar" name="Dictionary_slang:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/Dictionary_slang_jar</output-path>
     <root id="archive" name="Dictionary_slang.jar">
-      <element id="module-output" name="Dictionary_slang" />
+      <element id="module-output" name="Dict_19127098" />
     </root>
   </artifact>
 </component>
